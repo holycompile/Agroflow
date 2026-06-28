@@ -32,6 +32,7 @@ const Dashboard: React.FC<Props> = ({
   onToggleIrrigation
 }) => {
   const [streamDelay, setStreamDelay] = useState(22);
+  const [selectedMap, setSelectedMap] = useState(1);
 
   if (!budget) {
     return (
@@ -50,6 +51,75 @@ const Dashboard: React.FC<Props> = ({
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 relative pb-20">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-6">
+               <div className="glass-card p-6 rounded-3xl shadow-lg border border-gray-100">
+
+                      <h3 className="text-lg font-heading font-bold text-gray-900 mb-5">
+                        Satellite Crop Monitoring
+                      </h3>
+
+                      <div className="flex gap-3 mb-5">
+                        <button
+                          onClick={() => setSelectedMap(1)}
+                          className={`px-4 py-2 rounded-xl text-sm ${
+                            selectedMap === 1
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-gray-100'
+                          }`}
+                        >
+                          Stress
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedMap(2)}
+                          className={`px-4 py-2 rounded-xl text-sm ${
+                            selectedMap === 2
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-gray-100'
+                          }`}
+                        >
+                          Growth
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedMap(3)}
+                          className={`px-4 py-2 rounded-xl text-sm ${
+                            selectedMap === 3
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-gray-100'
+                          }`}
+                        >
+                          Irrigation
+                        </button>
+                      </div>
+
+                      <img
+                        src={
+                          selectedMap === 1
+                            ? "/mapss/tumkur_stress_class.png"
+                            : selectedMap === 2
+                            ? "/mapss/tumkur_growth_stage.png"
+                            : "/mapss/tumkur_irrig_advisory.png"
+                        }
+                        alt="Satellite Map"
+                        className="w-full rounded-2xl border shadow-md"
+                      />
+
+                    </div>
+        </div>
+
+        
+          
+          
+      </div>
+
+
+        
+
+
+
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-heading font-bold text-gray-900">Pathway Intelligence Center</h2>
@@ -102,15 +172,7 @@ const Dashboard: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Efficiency Metric */}
-        <div className="glass-card p-6 rounded-3xl border border-emerald-100 shadow-sm flex flex-col justify-center text-center">
-          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-full w-fit mx-auto mb-2">
-             <BarChart3 className="w-6 h-6" />
-          </div>
-          <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Irrigation Efficiency</h3>
-          <div className="text-3xl font-heading font-bold text-emerald-600">{budget.efficiencyScore}%</div>
-          <p className="text-[10px] text-gray-500 mt-2">Drip Method Optimization</p>
-        </div>
+        
 
        
       </div>
@@ -119,20 +181,7 @@ const Dashboard: React.FC<Props> = ({
 
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="glass-card p-6 rounded-3xl shadow-lg border border-gray-100">
-            <h3 className="text-lg font-heading font-bold text-gray-900 flex items-center mb-6">
-              <History className="w-5 h-5 mr-2 text-emerald-600" /> Real-Time Moisture Stream
-            </h3>
-            <SensorTrendChart />
-          </div>
-        </div>
-
-        
-          
-          
-        </div>
+     
       </div>
     
   );

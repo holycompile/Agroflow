@@ -40,6 +40,9 @@ export interface FarmData {
   smi?: number;
 
   evi?: number;
+ 
+  rainfall?: number;
+  temperature?: number;
   stress?: number;
   
   classificationAccuracy?: number;

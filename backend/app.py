@@ -80,14 +80,26 @@ def get_data():
     print(vciValue.getInfo())
     print(smiValue.getInfo())
 
+    eviValue = ndvi.multiply(1.1)
+    eviResult = eviValue.reduceRegion(
+    reducer=ee.Reducer.mean(),
+    geometry=region,
+    scale=10
+    )
     result = {
-        "lat": latitude,
-        "lon": longitude,
-        "ndvi": list(ndviValue.getInfo().values())[0],
-        "ndwi": list(ndwiValue.getInfo().values())[0],
-        "stress": list(stressValue.getInfo().values())[0],
-        "vci": list(vciValue.getInfo().values())[0],
-        "smi": list(smiValue.getInfo().values())[0]
+    "lat": latitude,
+    "lon": longitude,
+
+    "ndvi": list(ndviValue.getInfo().values())[0],
+    "ndwi": list(ndwiValue.getInfo().values())[0],
+    "stress": list(stressValue.getInfo().values())[0],
+
+    "vci": list(vciValue.getInfo().values())[0],
+    "smi": list(smiValue.getInfo().values())[0],
+
+    "evi": list(eviResult.getInfo().values())[0],
+    "rainfall": 650,
+    "temperature": 28
     }
 
     return jsonify(result)

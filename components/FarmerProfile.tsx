@@ -149,116 +149,17 @@ const FarmerProfile: React.FC<Props> = ({ onSave, initialData, isSaving, languag
                     <button type="button" onClick={handleGetCurrentLocation} className="p-3 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors">📍</button>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Crop</label>
-                    <select name="crop" value={formData.crop} onChange={handleChange} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                      {CROPS.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Area (Ha)</label>
-                    <input type="number" name="area" value={formData.area} onChange={handleChange} step="0.1" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
-                  </div>
-                </div>
+               
               </div>
-              <div className="space-y-4">
-                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Irrigation Method</label>
-                  <select name="irrigationMethod" value={formData.irrigationMethod} onChange={handleChange} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                    {IRRIGATION_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Planting Date</label>
-                  <input type="date" name="plantingDate" value={formData.plantingDate} onChange={handleChange} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
-                </div>
-              </div>
+              
             </div>
           </div>
 
           <hr className="border-gray-100" />
 
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-sm font-bold text-emerald-600 uppercase tracking-widest flex items-center">
-                <FileText className="w-4 h-4 mr-2" /> Knowledge Base
-              </h3>
-              <button type="button" onClick={() => fileInputRef.current?.click()} className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg flex items-center">
-                <FileUp className="w-3 h-3 mr-1" /> Add PDF
-              </button>
-              <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" multiple accept=".pdf" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {(formData.knowledgeBase || []).map(file => (
-                <div key={file.id} className="p-3 bg-slate-50 border border-gray-200 rounded-2xl flex items-center justify-between group">
-                  <div className="flex items-center space-x-3 truncate">
-                    <FileText className="w-4 h-4 text-emerald-600" />
-                    <span className="text-xs font-bold text-gray-900 truncate">{file.name}</span>
-                  </div>
-                  <button type="button" onClick={() => removeFile(file.id)} className="p-1 text-gray-300 hover:text-red-500"><X className="w-4 h-4" /></button>
-                </div>
-              ))}
-              {indexingFiles.map(id => (
-                <div key={id} className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center space-x-3 animate-pulse">
-                  <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
-                  <span className="text-xs font-bold text-emerald-800">Indexing...</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <hr className="border-gray-100" />
 
-          <div className="bg-slate-50 p-6 rounded-3xl border border-gray-200/50 space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl">
-                  <Wifi className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900">Live IoT Integration</h3>
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Firebase RTDB Hub</p>
-                </div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" name="firebase.enabled" checked={formData.firebase?.enabled} onChange={handleChange} className="sr-only peer" />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
-              </label>
-            </div>
-
-            {formData.firebase?.enabled && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in zoom-in-95 duration-300">
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Database URL</label>
-                    <input type="text" name="firebase.databaseURL" value={formData.firebase?.databaseURL} onChange={handleChange} placeholder="https://your-app.firebaseio.com" className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs focus:ring-1 focus:ring-emerald-500 outline-none" />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">API Key</label>
-                    <input type="password" name="firebase.apiKey" value={formData.firebase?.apiKey} onChange={handleChange} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs focus:ring-1 focus:ring-emerald-500 outline-none" />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Device/Sensor ID</label>
-                    <input type="text" name="firebase.deviceId" value={formData.firebase?.deviceId} onChange={handleChange} placeholder="field_node_01" className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs focus:ring-1 focus:ring-emerald-500 outline-none" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Min Raw (Dry)</label>
-                      <input type="number" name="firebase.minMoisture" value={formData.firebase?.minMoisture} onChange={handleChange} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Max Raw (Wet)</label>
-                      <input type="number" name="firebase.maxMoisture" value={formData.firebase?.maxMoisture} onChange={handleChange} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
+          
           <button type="submit" disabled={isSaving} className={`w-full py-4 rounded-2xl text-white font-bold text-lg shadow-xl flex items-center justify-center transition-all ${isSaving ? 'bg-emerald-300' : 'bg-emerald-600 hover:bg-emerald-700 hover:-translate-y-1'}`}>
             {isSaving ? <><Loader2 className="w-5 h-5 animate-spin mr-3" /> Processing...</> : 'Save Profile & Start Monitoring'}
           </button>

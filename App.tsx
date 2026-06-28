@@ -10,7 +10,7 @@ import CalendarTab from './components/CalendarTab';
 import AIModal from './components/AIModal';
 import VideoGenerator from './components/VideoGenerator';
 
-import SatelliteMap from './components/SatelliteMap';
+import SatelliteMapDashboard from './components/Satellitemapdashboard';
 import { NavigationTab, FarmData, BudgetResult, FarmAlert, CalendarEvent, Language, GrowthStage } from './types';
 import { calculateWaterBudget } from './services/gemini';
 import { subscribeToMoisture } from './services/firebase';
@@ -230,24 +230,43 @@ const App: React.FC = () => {
             <FarmerProfile onSave={handleSaveProfile} initialData={farmData} isSaving={isProcessing} language={language} />
           )}
           {activeTab === NavigationTab.DASHBOARD && isSetup && (
-            <>
-              {console.log("Farm Data:", farmData)}
-              {console.log("Location:", farmData?.location)}
-              {console.log("SatelliteMap receiving", farmData?.location)}
-              <SatelliteMap location={farmData?.location}  />
-U
-              <Dashboard
-                budget={budgetResult}
-                farmData={farmData}
-                onAlertClick={setSelectedAlert}
-                language={language}
-                isRefreshing={isProcessing}
-                onRefresh={handleRefreshBudget}
-                isIrrigating={isIrrigating}
-                onToggleIrrigation={setIsIrrigating}
-              />
-            </>
-          )}
+                <>
+                  {/* ── Satellite 3-map dashboard (Tumkur pilot) ── */}
+                  <SatelliteMapDashboard
+                    location={farmData?.location}
+                    satelliteData={
+                      farmData?.ndvi !== undefined
+                        ? {
+                            ndvi:        farmData.ndvi        ?? 0.48,
+                            ndwi:        farmData.ndwi        ?? 0.12,
+                            stress:      farmData.stress      ?? 0.31,
+                            vci:         farmData.vci         ?? 48,
+                            smi:         farmData.smi         ?? 55,
+                            evi:         farmData.evi         ?? 0.39,
+                            rainfall:    budgetResult?.weather?.humidity
+                                          ? budgetResult.weather.humidity * 5
+                                          : 412,
+                            temperature: budgetResult?.weather?.temp ?? 28.4,
+                          }
+                        : undefined
+                    }
+                  />
+
+                  {/* ── Existing intelligence dashboard below ── */}
+                  <div className="mt-8">
+                    <Dashboard
+                      budget={budgetResult}
+                      farmData={farmData}
+                      onAlertClick={setSelectedAlert}
+                      language={language}
+                      isRefreshing={isProcessing}
+                      onRefresh={handleRefreshBudget}
+                      isIrrigating={isIrrigating}
+                      onToggleIrrigation={setIsIrrigating}
+                    />
+                  </div>
+                </>
+              )}
           {activeTab === NavigationTab.SENSORS && isSetup && (
             <SensorAnalysis data={farmData} health={budgetResult?.cropHealth} language={language} isLive={isLive} onUpdateStage={handleUpdateStage} />
           )}
