@@ -106,6 +106,8 @@ const FarmerProfile: React.FC<Props> = ({ onSave, initialData, isSaving, languag
     }
   };
 
+  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);

@@ -27,17 +27,14 @@ interface SatelliteData {
 
 interface Props {
   location?: string;
+  latitude?: number;
+  longitude?: number;
   satelliteData?: SatelliteData;
 }
 
 // ─────────────────────────────────────────────────────────────
 // Tumkur District bounding box (pilot area)
 // ─────────────────────────────────────────────────────────────
-const TUMKUR_BOUNDS: [[number, number], [number, number]] = [
-  [13.10, 76.65],
-  [13.95, 77.45],
-];
-const TUMKUR_CENTER: [number, number] = [13.525, 77.05];
 
 // ─────────────────────────────────────────────────────────────
 // Simulated pixel-grid generator
@@ -165,7 +162,24 @@ const StatChip: React.FC<{ label: string; value: string; color: string }> = ({ l
 // ─────────────────────────────────────────────────────────────
 // Main component
 // ─────────────────────────────────────────────────────────────
-const SatelliteMapDashboard: React.FC<Props> = ({ location, satelliteData }) => {
+const SatelliteMapDashboard: React.FC<Props> = ({ location,longitude,latitude,satelliteData }) => {
+
+  const MAP_CENTER: [number, number] = [
+        latitude ?? 13.525,
+        longitude ?? 77.05
+        ];
+
+        const MAP_BOUNDS: [[number, number], [number, number]] = [
+      [
+        (latitude ?? 13.525) - 0.15,
+        (longitude ?? 77.05) - 0.15
+      ],
+      [
+        (latitude ?? 13.525) + 0.15,
+        (longitude ?? 77.05) + 0.15
+      ]
+    ];
+
   // active map layer toggle
   const [activeMap, setActiveMap] = useState<'stress' | 'growth' | 'irrig'>('stress');
   const [showTimeSeries, setShowTimeSeries] = useState(true);
@@ -248,9 +262,7 @@ const SatelliteMapDashboard: React.FC<Props> = ({ location, satelliteData }) => 
       {/* ── Map Layer Selector ── */}
       <div className="flex space-x-2">
         {[
-          { id: 'stress' as const, label: 'MAP 1 – Moisture Stress',     icon: <Activity className="w-4 h-4" /> },
-          { id: 'growth' as const, label: 'MAP 2 – Growth Stage',        icon: <Sprout className="w-4 h-4" /> },
-          { id: 'irrig'  as const, label: 'MAP 3 – Irrigation Advisory', icon: <Droplets className="w-4 h-4" /> },
+          { id: 'stress' as const, label: 'MAP - Location Specific Rough Regional Boundary  ',     icon: <Activity className="w-4 h-4" /> }
         ].map(({ id, label, icon }) => (
           <button
             key={id}
@@ -285,7 +297,7 @@ const SatelliteMapDashboard: React.FC<Props> = ({ location, satelliteData }) => 
 
           <MapContainer
             key={activeMap}
-            center={TUMKUR_CENTER}
+            center={MAP_CENTER}
             zoom={9}
             style={{ height: '520px', width: '100%' }}
             zoomControl={true}
@@ -298,7 +310,7 @@ const SatelliteMapDashboard: React.FC<Props> = ({ location, satelliteData }) => 
 
             {/* District boundary */}
             <Rectangle
-              bounds={TUMKUR_BOUNDS}
+              bounds={MAP_BOUNDS}
               pathOptions={{ color: '#1a1a2e', weight: 2.5, fillOpacity: 0, dashArray: '6 4' }}
             /> 
 

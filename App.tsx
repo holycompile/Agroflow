@@ -117,6 +117,8 @@ const App: React.FC = () => {
             ...data,
             ndvi: satellite.ndvi,
             ndwi: satellite.ndwi,
+            lat: satellite.lat,
+            lon: satellite.lon,
             vci: satellite.vci,
             smi: satellite.smi,
             stress: satellite.stress
@@ -234,6 +236,8 @@ const App: React.FC = () => {
                   {/* ── Satellite 3-map dashboard (Tumkur pilot) ── */}
                   <SatelliteMapDashboard
                     location={farmData?.location}
+                    latitude={farmData?.lat}
+                    longitude={farmData?.lon}
                     satelliteData={
                       farmData?.ndvi !== undefined
                         ? {

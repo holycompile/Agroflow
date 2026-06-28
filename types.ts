@@ -22,9 +22,14 @@ export interface FirebaseSettings {
 }
 
 export interface FarmData {
+
+
+  
   farmerName: string;
   farmName: string;
   location: string;
+  lat?: number;
+  lon?: number;
   season: string;
   crop: string;
   area: number;
@@ -58,6 +63,12 @@ export interface FarmData {
   plantingDate?: string;
   firebase?: FirebaseSettings; 
   knowledgeBase?: IndexedPDF[];
+
+
+
+
+
+  
 }
 
 export interface CropHealth {

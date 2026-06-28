@@ -1,10 +1,10 @@
-
+import {  Sprout,Droplets, CropIcon } from "lucide-react";
 import React, { useState, useEffect } from 'react';
 import { BudgetResult, FarmData, FarmAlert, Language } from '../types';
 import { BudgetPieChart, SensorTrendChart } from './Charts';
 import AlertCenter from './AlertCenter';
 import { 
-  AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Droplets, Info, 
+  AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Info, 
   ExternalLink, Globe, Target, Gauge, Waves, History, RefreshCw, 
   Sparkles, TrendingUp, Zap, CloudRain, BarChart3, Activity, 
   TrendingDown, Wind, Thermometer, Cloud, FileText
@@ -51,48 +51,66 @@ const Dashboard: React.FC<Props> = ({
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 relative pb-20">
-       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-               <div className="glass-card p-6 rounded-3xl shadow-lg border border-gray-100">
+       <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-8">
+
+                  
+       
+               <div className="glass-card p-6 w-full">
 
                       <h3 className="text-lg font-heading font-bold text-gray-900 mb-5">
                         Satellite Crop Monitoring
                       </h3>
 
-                      <div className="flex gap-3 mb-5">
+                      <div className="flex flex-wrap gap-3 mb-5">
                         <button
                           onClick={() => setSelectedMap(1)}
-                          className={`px-4 py-2 rounded-xl text-sm ${
+                          className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all border ${
                             selectedMap === 1
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-gray-100'
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                              : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
                           }`}
                         >
-                          Stress
+                          <Activity className="w-4 h-4" />
+                          <span>MAP 1 – Moisture Stress</span>
                         </button>
 
                         <button
                           onClick={() => setSelectedMap(2)}
-                          className={`px-4 py-2 rounded-xl text-sm ${
+                          className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all border ${
                             selectedMap === 2
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-gray-100'
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                              : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
                           }`}
                         >
-                          Growth
+                          <Sprout className="w-4 h-4" />
+                          <span>MAP 2 – Growth Stage</span>
                         </button>
 
                         <button
                           onClick={() => setSelectedMap(3)}
-                          className={`px-4 py-2 rounded-xl text-sm ${
+                          className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all border ${
                             selectedMap === 3
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-gray-100'
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                              : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
                           }`}
                         >
-                          Irrigation
+                          <Droplets className="w-4 h-4" />
+                          <span>MAP 3 – Irrigation Advisory </span>
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedMap(4)}
+                          className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                            selectedMap === 4
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                              : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
+                          }`}
+                        >
+                          <CropIcon className="w-4 h-4" />
+                          <span>MAP 4 – Crop Sustainability </span>
                         </button>
                       </div>
+
 
                       <img
                         src={
@@ -100,14 +118,58 @@ const Dashboard: React.FC<Props> = ({
                             ? "/mapss/tumkur_stress_class.png"
                             : selectedMap === 2
                             ? "/mapss/tumkur_growth_stage.png"
-                            : "/mapss/tumkur_irrig_advisory.png"
+                            : selectedMap === 3
+                            ? "/mapss/tumkur_irrig_advisory.png"
+                            
+                            : "/mapss/tumkur_crop_suitability.png"
+                            
                         }
                         alt="Satellite Map"
                         className="w-full rounded-2xl border shadow-md"
                       />
 
-                    </div>
-        </div>
+
+
+
+                </div>
+
+
+                <div className="mt-4 p-4 bg-green-50 rounded-xl border">
+                        <h4 className="font-semibold mb-2">
+                          MAP 4 Crop Suitability Legend
+                        </h4>
+                        
+
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-green-700 rounded"></div>
+                            Sugarcane
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-green-500 rounded"></div>
+                            Maize
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-yellow-400 rounded"></div>
+                            Ragi
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-orange-500 rounded"></div>
+                            Groundnut
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-amber-800 rounded"></div>
+                            Pulses
+                          </div>
+                        </div>
+                </div>
+
+                 
+        
 
         
           
