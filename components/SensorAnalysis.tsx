@@ -19,6 +19,51 @@ interface Props {
 
 const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpdateStage }) => {
   const [isSyncing, setIsSyncing] = useState(false);
+
+
+
+
+
+  const getStage = () => {
+        const moisture = data?.smi ?? 45;
+
+        if (moisture < 2)
+          return "GERMINATION";
+
+        if (moisture < 5)
+          return "SEEDLING";
+
+        if (moisture < 10)
+          return "VEGETATIVE";
+
+        if (moisture < 15)
+          return "FLOWERING";
+
+        return "FRUITING";
+      };
+
+      const currentStage = getStage();
+
+      const stages = [
+        "GERMINATION",
+        "SEEDLING",
+        "VEGETATIVE",
+        "FLOWERING",
+        "FRUITING",
+        "MATURITY",
+        "HARVEST"
+      ];
+
+const currentStageIndex = stages.indexOf(currentStage);
+
+  
+console.log("Sensor Data:", data);
+
+
+
+
+  const [prediction, setPrediction] = useState<any>(null);
+
   const [showCode, setShowCode] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -66,6 +111,34 @@ const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpd
   };
 
   useEffect(() => {
+      fetch("http://127.0.0.1:5001/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          N: 90,
+          P: 42,
+          K: 43,
+          temperature: 21,
+          humidity: 82,
+          ph: 6.5,
+          rainfall: 202
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("API RESPONSE:", data);
+          setPrediction(data);
+      })
+        .catch((err) => console.error(err));
+    }, []);
+
+
+
+
+
+  useEffect(() => {
     const interval = setInterval(() => {
       let payload = '';
       if (isLive && data?.firebase) {
@@ -88,9 +161,7 @@ const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpd
     return () => clearInterval(interval);
   }, [isLive, data?.soilMoisture, data?.firebase]);
 
-  const stages: GrowthStage[] = ['Germination', 'Seedling', 'Vegetative', 'Flowering', 'Fruiting', 'Maturity', 'Harvest'];
-  const currentStageIndex = stages.indexOf(health?.growthStage || 'Vegetative');
-
+  
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -138,8 +209,13 @@ const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpd
                   <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray={364.4} strokeDashoffset={364.4 - (364.4 * (health?.score || 85)) / 100} strokeLinecap="round" className="text-emerald-500 transition-all duration-1000" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-3xl font-bold text-emerald-900">{health?.score || 85}%</span>
-                  <span className="text-[10px] font-bold text-emerald-500 uppercase">{health?.status || 'Good'}</span>
+                  <span className="text-3xl font-bold text-emerald-900">
+                    {prediction?.accuracy || "90.4"}%
+                  </span>
+
+                  <span className="text-[10px] font-bold text-emerald-500 uppercase">
+                    AI MODEL
+                  </span>
                 </div>
               </div>
             </div>
@@ -149,30 +225,30 @@ const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpd
         <div className="md:col-span-2 glass-card p-6 rounded-3xl border border-gray-100 shadow-xl grid grid-cols-2 lg:grid-cols-4 gap-4">
           <HealthMetric
             icon={<Zap className="text-amber-500"/>}
-            label="NDVI"
-            value={data?.ndvi?.toFixed(2) || "0.00"}
-            trend="Vegetation"
+            label="Crop"
+            value={data?.crop ||prediction?.crop || "Loading..."}
+            trend="Random Forest Data Recommendation"
           />
 
           <HealthMetric
             icon={<Droplets className="text-blue-500"/>}
-            label="NDWI"       
-            value={data?.ndwi?.toFixed(2) || "0.00"}
-            trend="Water Index"
+            label="Temperature"
+           value={`${data?.temperature ?? 21}°C`}
+            trend="Climate"
           />
 
           <HealthMetric
             icon={<Activity className="text-purple-500"/>}
-            label="VCI"
-            value={`${data?.vci?.toFixed(2) || "0.00"}`}
-            trend="Vegetation"
+            label="Humidity"
+            value={`${data?.humidity ?? 82}%`}
+            trend="Environment"
           />
 
           <HealthMetric
             icon={<CloudRain className="text-emerald-500"/>}
-            label="SMI"
-            value={`${data?.smi?.toFixed(2) || "0.00"}`}
-            trend="Stress"
+            label="Rainfall"
+            value={`${data?.rainfall ?? 202} mm`}
+            trend="Weather"
           />
         </div>
       </div>
@@ -213,17 +289,7 @@ const SensorAnalysis: React.FC<Props> = ({ data, health, language, isLive, onUpd
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-        <div className="lg:col-span-2">
-          <div className="glass-card p-4 md:p-6 rounded-3xl shadow-lg border border-gray-100">
-            <h3 className="font-heading font-bold text-gray-900 flex items-center mb-6">
-              <Activity className="w-5 h-5 mr-2 text-emerald-600" /> Moisture Stress Time Series
-            </h3>
-            <SensorTrendChart />
-          </div>
-        </div>
-        
-      </div>
+      
     </div>
   );
 };

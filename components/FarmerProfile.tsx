@@ -25,6 +25,7 @@ const FarmerProfile: React.FC<Props> = ({ onSave, initialData, isSaving, languag
     groundwaterLevel: 25,
     rainfallIndex: 0,
     soilMoisture: 45,
+    
     plantingDate: new Date().toISOString().split('T')[0],
     knowledgeBase: [
       { id: '1', name: 'Wheat_Irrigation_Manual_v1.pdf', size: '1.2 MB', date: '2024-05-12', status: 'indexed' },

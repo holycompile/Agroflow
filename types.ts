@@ -45,7 +45,7 @@ export interface FarmData {
   smi?: number;
 
   evi?: number;
- 
+  humidity?: number;
   rainfall?: number;
   temperature?: number;
   stress?: number;
@@ -65,8 +65,7 @@ export interface FarmData {
   knowledgeBase?: IndexedPDF[];
 
 
-
-
+ 
 
   
 }

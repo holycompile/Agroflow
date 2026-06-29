@@ -19,10 +19,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isSetup, farm
   const allItems = [
     { id: NavigationTab.PROFILE, label: t('profile'), icon: UserCircle, public: true },
     { id: NavigationTab.DASHBOARD, label: t('Dashboard'), icon: LayoutDashboard, public: false },
-    { id: NavigationTab.SENSORS, label: t('sensors'), icon: Activity, public: false },
+    { id: NavigationTab.SENSORS, label: t('Phenology'), icon: Activity, public: false },
     { id: NavigationTab.INSIGHTS, label: t('analytics'), icon: LineChart, public: false },
-    { id: NavigationTab.VIDEO, label: t('videoLab'), icon: Film, public: false },
-    { id: NavigationTab.CALENDAR, label: t('calendar'), icon: Calendar, public: false },
+    
   ];
 
   const visibleItems = isSetup ? allItems : allItems.filter(i => i.public);
